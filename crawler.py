@@ -60,7 +60,7 @@ def save_project(url_project):
             json.dump(project, json_file, indent=4, ensure_ascii=False)
 
 
-def seek_category(host, logger, max_page_num=200):
+def seek_projects(host, logger, max_page_num=200):
     project_id = 1
     for page_id in range(1, max_page_num + 1):
         url_explore = host + "&page=" + str(page_id)
@@ -90,36 +90,34 @@ def seek_category(host, logger, max_page_num=200):
         time.sleep(1)
 
 
+def seek_categories(host="https://www.kickstarter.com/discover/"):
+    category_list = []
+    response = requests.get(host)
+    soup = BeautifulSoup(response.text, "html.parser")
+    body = soup.find("body")
+    main_content = body.find("main")
+
+    categories = main_content.findAll("ul", "columns2-sm w50-sm")
+    for cat in categories:
+        subcategories = cat.findAll("li", "js-subcategory block")
+        for subcat in subcategories:
+            data = subcat["data-category"]
+            category_list.append(int(json.loads(data)["id"]))
+
+    for category_id in category_list:
+        response = requests.get(host + "advanced?category_id=" + str(category_id) + "&page=1")
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        title = soup.find("title").text
+        if title == "The page you were looking for doesn't exist (404)":
+            pass
+        elif len(title[12:][:-15].split(" / ")) == 1:
+            pass
+        else:
+            with open("logs/category_" + str(category_id) + ".csv", "w") as logger:
+                seek_projects(host + "advanced?category_id=" + str(category_id), logger, 1)
+                break
+
+
 if __name__ == "__main__":
-    HOST = "https://www.kickstarter.com/discover/advanced"
-    category_list = [20, 21, 22, 23, 24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
-                     46, 47, 48, 49, 50, 51, 52, 53, 54, 239, 241, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272,
-                     273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292,
-                     293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312,
-                     313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332,
-                     333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352,
-                     353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 386]
-    for category_id in category_list:  # in range(10, 500):
-        with open("logs/category_" + str(category_id) + ".csv", "w") as logger:
-            # response = requests.get(HOST + "?category_id=" + str(category_id) + "&page=1")
-            # soup = BeautifulSoup(response.text, "html.parser")
-            #
-            # title = soup.find("title").text
-            # if title == "The page you were looking for doesn't exist (404)":
-            #     pass
-            #     logger.write("The page you were looking for doesn't exist (404)\n")
-            # elif len(title[12:][:-15].split(" / ")) == 1:
-            #     pass
-            #     logger.write("Subcategory is empty\n")
-            # else:
-            seek_category(HOST + "?category_id=" + str(category_id), logger, 1)
-            break
-
-
-# # TEST__________________________________________________________________________________________________________________
-# if __name__ == "__main__":
-#     url_LIVE = "https://www.kickstarter.com/projects/stencilbydonnybrook/the-stencil-by-donny-brook"
-#     save_project(url_LIVE)
-#     url_DEATH = "https://www.kickstarter.com/projects/170839637/rain-painting-trip-to-seattle"
-#     save_project(url_DEATH)
-# # TEST__________________________________________________________________________________________________________________
+    seek_categories()
