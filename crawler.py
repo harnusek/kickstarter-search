@@ -53,7 +53,6 @@ def save_project(url_project):
         project["error"] = str(traceback.format_exc())
         print(project["error"])
         filename = "error " + filename
-        time.sleep(5)
     finally:
         # print(print(json.dumps(project, indent=4, sort_keys=True)))
         with open("data/" + filename, "w", encoding="utf8") as json_file:
@@ -88,7 +87,7 @@ def seek_projects(host, logger, max_page_num=200):
             project_id = project_id + 1
             time.sleep(1)
         time.sleep(1)
-
+    time.sleep(1)
 
 def seek_categories(host="https://www.kickstarter.com/discover/"):
     category_list = []
@@ -116,7 +115,7 @@ def seek_categories(host="https://www.kickstarter.com/discover/"):
         else:
             with open("logs/category_" + str(category_id) + ".csv", "w") as logger:
                 seek_projects(host + "advanced?category_id=" + str(category_id), logger, 1)
-                break
+                # break
 
 
 if __name__ == "__main__":
