@@ -22,21 +22,21 @@ def save_project(url_project):
             .replace("&quot;", "\"")
         data = json.loads(current_project)
 
-        project["id"] = data["id"]
         project["url"] = url_project
         project["title"] = soup.find("meta", {"property": "og:title"})["content"]
         project["description"] = soup.find("meta", {"property": "og:description"})["content"]
         project["state"] = data["state"]
-        project["created_at"] = datetime.fromtimestamp(data["created_at"]).strftime('%Y-%m-%d %H:%M:%S')
-        project["deadline"] = datetime.fromtimestamp(data["deadline"]).strftime('%Y-%m-%d %H:%M:%S')
+        project["createdAt"] = datetime.fromtimestamp(data["created_at"]).strftime('%Y-%m-%d %H:%M:%S')
+        project["deadlineAt"] = datetime.fromtimestamp(data["deadline"]).strftime('%Y-%m-%d %H:%M:%S')
         project["backersCount"] = data["backers_count"]
+        project["currency"] = data["currency"]
         project["pledged"] = data["pledged"]
-        project["usd_pledged"] = data["usd_pledged"]
+        project["pledgedUSD"] = float(data["usd_pledged"])
         project["goal"] = data["goal"]
         project["location"] = data["location"]["name"]
         project["country"] = data["location"]["country"]
         project["creator"] = data["creator"]["name"]
-        project["category"] = data["category"]["slug"]
+        project["category"] = data["category"]["slug"].split("/")
 
         body = soup.find("body")
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
             #     logger.write("Subcategory is empty\n")
             # else:
             seek_category(HOST + "?category_id=" + str(category_id), logger, 1)
-            # break
+            break
 
 
 # # TEST__________________________________________________________________________________________________________________
