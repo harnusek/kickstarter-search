@@ -114,7 +114,7 @@ def seek_categories(host="https://www.kickstarter.com/discover/"):
             pass
         else:
             with open("logs/category_" + str(category_id) + ".csv", "w") as logger:
-                seek_projects(host + "advanced?category_id=" + str(category_id), logger, 1)
+                seek_projects(host + "advanced?category_id=" + str(category_id), logger)
                 # break
 
 
