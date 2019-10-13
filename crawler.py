@@ -91,7 +91,7 @@ def seek_projects(host, logger, max_page_num=200):
             logger.write(str(project_id) + "," + str(page_id) + "," + str(status) + "," + url_project + "\n")
             print(str(project_id) + "," + str(page_id) + "," + str(status) + "," + url_project)
             project_id = project_id + 1
-            time.sleep(1)
+            time.sleep(0.2)
 
 
 def seek_categories(host="https://www.kickstarter.com/discover/"):
@@ -110,6 +110,7 @@ def seek_categories(host="https://www.kickstarter.com/discover/"):
 
     for category_id in category_list:
         if os.path.isfile("logs/category_" + str(category_id) + ".csv"):
+            print("skipped: ", category_id)
             continue
         response = requests.get(host + "advanced?category_id=" + str(category_id) + "&page=1")
         soup = BeautifulSoup(response.text, "html.parser")
