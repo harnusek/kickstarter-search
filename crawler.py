@@ -92,7 +92,7 @@ def seek_projects(host, logger, max_page_num=200):
             logger.write(str(project_id) + "," + str(page_id) + "," + str(status) + "," + url_project + "\n")
             print(str(project_id) + "," + str(page_id) + "," + str(status) + "," + url_project)
             project_id = project_id + 1
-            time.sleep(0.1)
+            time.sleep(0.3)
 
 
 def seek_categories(host="https://www.kickstarter.com/discover/"):
