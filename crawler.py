@@ -4,6 +4,7 @@ import time
 from bs4 import BeautifulSoup
 import traceback
 from datetime import datetime
+import os
 
 
 def save_project(url_project):
@@ -108,6 +109,8 @@ def seek_categories(host="https://www.kickstarter.com/discover/"):
             category_list.append(int(json.loads(data)["id"]))
 
     for category_id in category_list:
+        if os.path.isfile("logs/category_" + str(category_id) + ".csv"):
+            continue
         response = requests.get(host + "advanced?category_id=" + str(category_id) + "&page=1")
         soup = BeautifulSoup(response.text, "html.parser")
 
