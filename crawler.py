@@ -21,7 +21,8 @@ def save_project(url_project):
             .split("window.current_project = \"")[1] \
             .split("\";\n")[0] \
             .replace("\\\\&quot", "") \
-            .replace("&quot;", "\"")
+            .replace("&quot;", "\"") \
+            .replace("&amp;", "&")
         data = json.loads(current_project)
 
         project["url"] = url_project
@@ -37,7 +38,7 @@ def save_project(url_project):
         project["goal"] = data["goal"]
         if "location" in data:
             project["location"] = data["location"]["name"]
-        project["country"] = data["location"]["country"]
+            project["country"] = data["location"]["country"]
         project["creator"] = data["creator"]["name"]
         project["category"] = data["category"]["slug"].split("/")
 
