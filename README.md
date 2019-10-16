@@ -2,7 +2,7 @@
  Fast in-memory search over Kickstarter data 
 
 1. Retrieved non-trivial dataset from the web by crawling
-    * Data - 200MB+ (approx. 50k+) from `htttp://kickstarter.com`
+    * Data - 200MB+ (approx. 50k+) from [Kikstarter](https://www.kickstarter.com)
 
 todos:
 
