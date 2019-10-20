@@ -1,3 +1,4 @@
 .idea/
-kickstarter_bulk.NDJSON
+kickstarter.NDJSON
 *.json
+venv/
