@@ -69,9 +69,10 @@ PUT http://localhost:9200/kickstarter
 
 ---
 
-#Queries
-
+# Queries
+## 0. Informations about index
 Request: `GET http://localhost:9200/_cat/indices/kickstarter?format=json&pretty`
+
 Response: 
 ```
 [
@@ -90,3 +91,38 @@ Response:
 ]
 ```
 
+## 1. 
+Request:
+```
+POST http://localhost:9200/
+```
+
+## 2. 
+Request:
+```
+POST http://localhost:9200/
+```
+
+## 3. 
+Request:
+```
+POST http://localhost:9200/
+```
+
+## 4. 
+Request:
+```
+POST http://localhost:9200/
+```
+
+## 5. 
+Request:
+```
+POST http://localhost:9200/
+```
+
+## 6. 
+Request:
+```
+POST http://localhost:9200/
+```
