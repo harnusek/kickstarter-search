@@ -70,59 +70,83 @@ PUT http://localhost:9200/kickstarter
 ---
 
 # Queries
-## 0. Informations about index
-Request: `GET http://localhost:9200/_cat/indices/kickstarter?format=json&pretty`
-
-Response: 
+## 1. Find projects not from US and with category=pottery
+Request:
 ```
-[
-  {
-    "health": "yellow",
-    "status": "open",
-    "index": "kickstarter",
-    "uuid": "kd30qWLUTjG2m2mbGm1EvA",
-    "pri": "1",
-    "rep": "1",
-    "docs.count": "170493",
-    "docs.deleted": "1",
-    "store.size": "252.4mb",
-    "pri.store.size": "252.4mb"
+POST http://localhost:9200/kickstarter/_search
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "bool": {
+          "must_not": [{
+            "term": {
+              "country": "US"
+            }
+          }]
+        }
+      },
+      "must": [
+        {
+          "nested": {
+            "path": "category",
+            "query": {
+              "bool": {
+                "must": [{
+                  "term": {
+                    "category.name": "pottery"
+                  }
+                }]
+              }
+            }
+          }
+        }
+      ]
+    }
   }
-]
+}
 ```
 
-## 1. 
-Request:
+## 2. Find projects with state=live, ordered boosted by how much times was goal fulfilled , minimum is 1
+Request: 
 ```
-POST http://localhost:9200/
-```
-
-## 2. 
-Request:
-```
-POST http://localhost:9200/
+POST http://localhost:9200/kickstarter/_search
+{
+  "min_score": 1,
+  "query": { 
+    "function_score": {
+      "query": { 
+        "match": {"state": "live" }
+      },
+      "boost_mode": "replace", 
+      "script_score": {
+        "script": "(((doc['pledged'].value - doc['goal'].value) + Math.abs(doc['pledged'].value - doc['goal'].value))/2)/doc['goal'].value" 
+      }
+    }
+  }
+}
 ```
 
 ## 3. 
 Request:
 ```
-POST http://localhost:9200/
+POST http://localhost:9200/kickstarter/_search
 ```
 
 ## 4. 
 Request:
 ```
-POST http://localhost:9200/
+POST http://localhost:9200/kickstarter/_search
 ```
 
 ## 5. 
 Request:
 ```
-POST http://localhost:9200/
+POST http://localhost:9200/kickstarter/_search
 ```
 
 ## 6. 
 Request:
 ```
-POST http://localhost:9200/
+POST http://localhost:9200/kickstarter/_search
 ```
