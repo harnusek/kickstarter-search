@@ -74,56 +74,62 @@ PUT http://localhost:9200/kickstarter
 Request:
 ```
 POST http://localhost:9200/kickstarter/_search
-{
-  "query": {
-    "bool": {
-      "filter": {
-        "bool": {
-          "must_not": [{
-            "term": {
-              "country": "US"
-            }
-          }]
+{ 
+    "query":{ 
+        "bool":{ 
+            "filter":{ 
+                "bool":{ 
+                    "must_not":[ 
+                        { 
+                            "term":{ 
+                                "country":"US"
+                            }
+                        }
+                    ]
+                }
+            },
+            "must":[ 
+                { 
+                    "nested":{ 
+                        "path":"category",
+                        "query":{ 
+                            "bool":{ 
+                                "must":[ 
+                                    { 
+                                        "term":{ 
+                                            "category.name":"pottery"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
         }
-      },
-      "must": [
-        {
-          "nested": {
-            "path": "category",
-            "query": {
-              "bool": {
-                "must": [{
-                  "term": {
-                    "category.name": "pottery"
-                  }
-                }]
-              }
-            }
-          }
-        }
-      ]
     }
-  }
 }
 ```
 
-## 2. Find projects with state=live, ordered boosted by how much times was goal fulfilled , minimum is 1
+## 2. Find projects with state=live, ordered by how much times was goal fulfilled , minimum is 1
 Request: 
 ```
 POST http://localhost:9200/kickstarter/_search
-{
-  "min_score": 1,
-  "query": { 
-    "function_score": {
-      "query": { 
-        "match": {"state": "live" }
-      },
-      "boost_mode": "replace", 
-      "script_score": {
-        "script": "(((doc['pledged'].value - doc['goal'].value) + Math.abs(doc['pledged'].value - doc['goal'].value))/2)/doc['goal'].value" 
-      }
+{ 
+    "min_score":1,
+    "query":{ 
+        "function_score":{ 
+            "query":{ 
+                "match":{ 
+                    "state":"live"
+                }
+            },
+            "boost_mode":"replace",
+            "script_score":{ 
+                "script":"(((doc['pledged'].value - doc['goal'].value) + Math.abs(doc['pledged'].value - doc['goal'].value))/2)/doc['goal'].value"
+            }
+        }
     }
-  }
 }
 ```
 
