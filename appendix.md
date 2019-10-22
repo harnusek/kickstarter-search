@@ -120,7 +120,7 @@ POST http://localhost:9200/kickstarter/_search
     "query":{ 
         "function_score":{ 
             "query":{ 
-                "match":{ 
+                "term":{ 
                     "state":"live"
                 }
             },
