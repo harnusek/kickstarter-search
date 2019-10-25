@@ -88,13 +88,11 @@ POST http://localhost:9200/kick/_search
         "bool":{ 
             "filter":{ 
                 "bool":{ 
-                    "must_not":[ 
-                        { 
-                            "term":{ 
-                                "country":"US"
-                            }
+                    "filter":{ 
+                        "term":{ 
+                            "country":"US"
                         }
-                    ]
+                    }
                 }
             },
             "must":[ 
