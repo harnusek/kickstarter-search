@@ -103,13 +103,11 @@ POST http://localhost:9200/kick/_search
                         "path":"category",
                         "query":{ 
                             "bool":{ 
-                                "must":[ 
-                                    { 
-                                        "term":{ 
-                                            "category.name":"pottery"
-                                        }
+                                "filter":{ 
+                                    "term":{ 
+                                        "category.name":"pottery"
                                     }
-                                ]
+                                }
                             }
                         }
                     }
