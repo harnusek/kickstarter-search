@@ -2,16 +2,22 @@
 ```
 PUT http://localhost:9200/kickstarter
 {
+    "settings":{
+        "number_of_shards": 1,
+        "number_of_replicas": 0
+    },
    "mappings":{
       "properties":{
          "url":{
             "type":"keyword"
          },
          "title":{
-            "type":"text"
+            "type":"text",
+            "analyzer": "english"
          },
          "description":{
-            "type":"text"
+            "type":"text",
+            "analyzer": "english"
          },
          "state":{
             "type":"keyword"
@@ -57,10 +63,12 @@ PUT http://localhost:9200/kickstarter
             }
          },
          "about":{
-            "type":"text"
+            "type":"text",
+            "analyzer": "english"
          },
          "risksAndChallenges":{
-            "type":"text"
+            "type":"text",
+            "analyzer": "english"
          }
       }
    }
@@ -136,7 +144,12 @@ POST http://localhost:9200/kickstarter/_search
 ## 3. 
 Request:
 ```
-POST http://localhost:9200/kickstarter/_search
+POST http://localhost:9200/kickstarter/_search?size=0
+{
+    "aggs" : {
+        "grades_stats" : { "stats" : { "field" : "pledgedUSD" } }
+    }
+}
 ```
 
 ## 4. 
