@@ -154,26 +154,46 @@ POST http://localhost:9200/kick/_search?size=0
 }
 ```
 
-## 4. Nájdi prvých 10 prebiehajúcich projektov z GB, v ktoré majú v texte slovo brexit. Nech sú zoradené podľa množstva vyzbieraných peňazí.
+## 4. Nájdi prebiehajúce projekty z GB, v ktoré majú v texte slová "queen Victoria". Nech sú zoradené podľa najsneskôr vytvorených.
+- použitie multi_match
 Request: 
 ```
 POST http://localhost:9200/kick/_search
-{
-    "from": 0, "size": 10,
-    "query": { 
-        "bool": {
-            "must": {
-                "multi_match": {
-                    "query": "brexit",
-                    "fields": ["title", "description", "about", "risksAndChallenges"]
+{ 
+    "query":{ 
+        "bool":{ 
+            "must":{ 
+                "multi_match":{ 
+                    "query":"queen Victoria",
+                    "type":"cross_fields",
+                    "fields":[ 
+                        "title",
+                        "description",
+                        "about",
+                        "risksAndChallenges"
+                    ],
+                    "operator":"and"
                 }
             },
-            "filter": [
-                { "term":  { "state": "live" }},
-                { "term":  { "country": "GB" }}            ]
+            "filter":[ 
+                { 
+                    "term":{ 
+                        "state":"live"
+                    }
+                },
+                { 
+                    "term":{ 
+                        "country":"GB"
+                    }
+                }
+            ]
         }
     },
-    "sort": { "pledgedUSD": { "order": "desc" } }
+    "sort":{ 
+        "createdAt":{ 
+            "order":"desc"
+        }
+    }
 }
 ```
 
