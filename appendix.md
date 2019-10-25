@@ -224,13 +224,31 @@ POST http://localhost:9200/kick/_search
 ```
 
 ## 5. 
-Request:
+Request: Nájdi priemernú vyzbieranú sumu prebiehajúcich projektov, ktoré končia za 1 deň.
+- použitie range, aggs
 ```
-POST http://localhost:9200/kick/_search
+POST http://localhost:9200/kick/_search?size=0
+{ 
+    "query":{ 
+        "range":{ 
+            "deadlineAt":{ 
+                "gte":"now",
+                "lt":"now+1d/d"
+            }
+        }
+    },
+    "aggs":{ 
+        "pledgedAverage":{ 
+            "avg":{ 
+                "field":"pledgedUSD"
+            }
+        }
+    }
+}
 ```
 
 ## 6. 
 Request:
 ```
-POST http://localhost:9200/kick/_search
+POST http://localhost:9200/kick/_search?size=0
 ```
