@@ -1,6 +1,6 @@
 # Mapping
 ```
-PUT http://localhost:9200/kickstarter
+PUT http://localhost:9200/kick
 {
     "settings":{
         "number_of_shards": 1,
@@ -78,10 +78,11 @@ PUT http://localhost:9200/kickstarter
 ---
 
 # Queries
-## 1. Find projects not from US and with category=pottery
+## 1. Nájdi všetky projekty z kategórie keramiky, ktoré nie sú z USA 
+- použitie nested
 Request:
 ```
-POST http://localhost:9200/kickstarter/_search
+POST http://localhost:9200/kick/_search
 { 
     "query":{ 
         "bool":{ 
@@ -119,10 +120,11 @@ POST http://localhost:9200/kickstarter/_search
 }
 ```
 
-## 2. Find projects with state=live, ordered by how much times was goal fulfilled , minimum is 1
+## 2. Nájdi prebiehajúce projekty. Ich skóre vypočítaj podľa relatívneho prekročenia cieľa. Minimum je 1 násobné prekročenie.
+- použitie boost_mode
 Request: 
 ```
-POST http://localhost:9200/kickstarter/_search
+POST http://localhost:9200/kick/_search
 { 
     "min_score":1,
     "query":{ 
@@ -144,7 +146,7 @@ POST http://localhost:9200/kickstarter/_search
 ## 3. 
 Request:
 ```
-POST http://localhost:9200/kickstarter/_search?size=0
+POST http://localhost:9200/kick/_search?size=0
 {
     "aggs" : {
         "grades_stats" : { "stats" : { "field" : "pledgedUSD" } }
@@ -152,20 +154,37 @@ POST http://localhost:9200/kickstarter/_search?size=0
 }
 ```
 
-## 4. 
-Request:
+## 4. Nájdi prvých 10 prebiehajúcich projektov z GB, v ktoré majú v texte slovo brexit. Nech sú zoradené podľa množstva vyzbieraných peňazí.
+Request: 
 ```
-POST http://localhost:9200/kickstarter/_search
+POST http://localhost:9200/kick/_search
+{
+    "from": 0, "size": 10,
+    "query": { 
+        "bool": {
+            "must": {
+                "multi_match": {
+                    "query": "brexit",
+                    "fields": ["title", "description", "about", "risksAndChallenges"]
+                }
+            },
+            "filter": [
+                { "term":  { "state": "live" }},
+                { "term":  { "country": "GB" }}            ]
+        }
+    },
+    "sort": { "pledgedUSD": { "order": "desc" } }
+}
 ```
 
 ## 5. 
 Request:
 ```
-POST http://localhost:9200/kickstarter/_search
+POST http://localhost:9200/kick/_search
 ```
 
 ## 6. 
 Request:
 ```
-POST http://localhost:9200/kickstarter/_search
+POST http://localhost:9200/kick/_search
 ```
