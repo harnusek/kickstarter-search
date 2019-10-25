@@ -140,12 +140,42 @@ POST http://localhost:9200/kick/_search
 ```
 
 ## 3. 
-Request:
+Request: Nájdi početnosť projektov z kategórie comics pre každý stav projektu okrem prebiehajúceho.
+- použitie nested, aggregations
 ```
 POST http://localhost:9200/kick/_search?size=0
-{
-    "aggs" : {
-        "grades_stats" : { "stats" : { "field" : "pledgedUSD" } }
+{ 
+    "query":{ 
+        "bool":{ 
+            "must":[ 
+                { 
+                    "nested":{ 
+                        "path":"category",
+                        "query":{ 
+                            "bool":{ 
+                                "filter":{ 
+                                    "term":{ 
+                                        "category.name":"comics"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "must_not":{ 
+                "term":{ 
+                    "state":"live"
+                }
+            }
+        }
+    },
+    "aggregations":{ 
+        "states":{ 
+            "terms":{ 
+                "field":"state"
+            }
+        }
     }
 }
 ```
