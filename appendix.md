@@ -248,7 +248,40 @@ POST http://localhost:9200/kick/_search?size=0
 ```
 
 ## 6. 
-Request:
+Request: Nájdi
 ```
 POST http://localhost:9200/kick/_search?size=0
+{ 
+    "query":{ 
+        "bool":{ 
+            "must":{ 
+                "range":{ 
+                    "createdAt":{ 
+                        "gte":"2019-01-01 00:00:00"
+                    }
+                }
+            },
+            "filter":[ 
+                { 
+                    "term":{ 
+                        "country":"GB"
+                    }
+                },
+                { 
+                    "term":{ 
+                        "state":"successful"
+                    }
+                }
+            ]
+        }
+    },
+    "aggs":{ 
+        "tags":{ 
+            "terms":{ 
+                "field":"location",
+                "min_doc_count":10
+            }
+        }
+    }
+}
 ```
