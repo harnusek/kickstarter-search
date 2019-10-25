@@ -78,7 +78,7 @@ PUT http://localhost:9200/kick
 ---
 
 # Queries
-## 1. Nájdi všetky projekty z kategórie keramiky, ktoré nie sú z USA 
+## 1. Chcem nájsť všetky projekty z kategórie keramiky, ktoré nie sú z USA 
 - použitie nested
 Request:
 ```
@@ -116,7 +116,7 @@ POST http://localhost:9200/kick/_search
 }
 ```
 
-## 2. Nájdi prebiehajúce projekty. Ich skóre vypočítaj podľa relatívneho prekročenia cieľa. Minimum je 1 násobné prekročenie.
+## 2. Chcem nájsť prebiehajúce projekty. Ich skóre vypočítať podľa relatívneho prekročenia cieľa. Minimum je 1 násobné prekročenie.
 - použitie boost_mode
 Request: 
 ```
@@ -140,7 +140,7 @@ POST http://localhost:9200/kick/_search
 ```
 
 ## 3. 
-Request: Nájdi početnosť projektov z kategórie comics pre každý stav projektu okrem prebiehajúceho.
+Request: Chcem nájsť početnosť projektov z kategórie comics pre každý stav projektu okrem prebiehajúceho.
 - použitie nested, aggregations
 ```
 POST http://localhost:9200/kick/_search?size=0
@@ -170,7 +170,7 @@ POST http://localhost:9200/kick/_search?size=0
             }
         }
     },
-    "aggregations":{ 
+    "aggs":{ 
         "states":{ 
             "terms":{ 
                 "field":"state"
@@ -180,7 +180,7 @@ POST http://localhost:9200/kick/_search?size=0
 }
 ```
 
-## 4. Nájdi prebiehajúce projekty z GB, v ktoré majú v texte slová "queen Victoria". Nech sú zoradené podľa najsneskôr vytvorených.
+## 4. Chcem nájsť prebiehajúce projekty z V. Británie, ktoré majú v texte slová "queen Victoria". Nech sú zoradené podľa najsneskôr vytvorených.
 - použitie multi_match
 Request: 
 ```
@@ -224,7 +224,7 @@ POST http://localhost:9200/kick/_search
 ```
 
 ## 5. 
-Request: Nájdi priemernú vyzbieranú sumu prebiehajúcich projektov, ktoré končia za 1 deň.
+Request: Chcem nájsť priemernú vyzbieranú sumu prebiehajúcich projektov, ktoré budú končiť za 1 deň.
 - použitie range, aggs
 ```
 POST http://localhost:9200/kick/_search?size=0
@@ -248,7 +248,8 @@ POST http://localhost:9200/kick/_search?size=0
 ```
 
 ## 6. 
-Request: Nájdi
+Request: Chcem nájsť počet úspešných projektov z V. Británie a roka 2019. Počet nech je aspoň 10.
+- použitie range, aggs
 ```
 POST http://localhost:9200/kick/_search?size=0
 { 
