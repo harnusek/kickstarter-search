@@ -135,8 +135,8 @@ POST http://localhost:9200/kick/_search
 }
 ```
 
-## 3. 
-Request: Chcem nájsť početnosť ukončených projektov z kategórie comics pre každý stav projektu.
+## 3. Chcem nájsť početnosť ukončených projektov z kategórie comics pre každý stav projektu.
+Request: 
 - použitie nested, aggs
 ```
 POST http://localhost:9200/kick/_search?size=0
@@ -219,8 +219,8 @@ POST http://localhost:9200/kick/_search
 }
 ```
 
-## 5. 
-Request: Chcem nájsť priemernú vyzbieranú sumu prebiehajúcich projektov, ktoré budú končiť za 1 deň.
+## 5. Chcem nájsť priemernú vyzbieranú sumu prebiehajúcich projektov, ktoré budú končiť za 1 deň.
+Request: 
 - použitie range, aggs
 ```
 POST http://localhost:9200/kick/_search?size=0
@@ -243,8 +243,8 @@ POST http://localhost:9200/kick/_search?size=0
 }
 ```
 
-## 6. 
-Request: Chcem nájsť počet úspešných projektov z V. Británie a roka 2019. Počet nech je aspoň 10.
+## 6. Chcem nájsť počet úspešných projektov z V. Británie a roka 2019. Počet nech je aspoň 10.
+Request: 
 - použitie range, aggs
 ```
 POST http://localhost:9200/kick/_search?size=0
